@@ -1,5 +1,4 @@
 <script setup lang="ts">
-const runtimeConfig = useRuntimeConfig()
 const { locale, locales } = useI18n()
 const switchLocalePath = useSwitchLocalePath()
 // const localePath = useLocalePath()
@@ -7,38 +6,39 @@ const currentLocale = computed(() => {
   return locales.value.find((i: any) => i.code === locale.value)
 })
 const rtl = computed(() => ['ar', 'he'].includes(locale.value))
-
-function openAuthWindow() {
-  window.open('/auth/google', 'auth', 'popup,width=800,height=600')
+const showSider = ref(false)
+function closeSider() {
+  showSider.value = false
 }
 </script>
 
 <template>
-  <div class="flex items-center">
+  <div class="flex items-center h-9 relative">
     <DropDown
-      class="flex items-center relative cursor-default shrink-0"
-      :class="rtl ? 'flex-row-reverse pr-2 pl-2' : 'pl-4'"
-      :top="30"
+      class="hidden md:flex items-center relative cursor-default shrink-0"
+      :top="38"
       :left="0"
     >
       <template #default="{ active }">
-        <i class="icon-[ph--translate-bold] text-xl color-action shrink-0" :class="rtl ? 'ml-1' : 'mr-1'" role="img" aria-hidden="true" />
-        <span class="color-action shrink-0 select-none">{{ currentLocale?.name }}</span>
-        <i
-          class="icon-[material-symbols--arrow-drop-down-rounded] text-2xl color-action transition-all shrink-0"
-          role="img"
-          :class="{ 'rotate-180': active }"
-          aria-hidden="true"
-        />
+        <button class="h-9 center pl-2 pr-1 rounded-lg color-action md:hover:bg-gray-200 md:dark:hover:bg-gray-700" :class="{ 'bg-gray-200 dark:bg-gray-700': active }">
+          <i class="icon-[hugeicons--translation] text-xl shrink-0" :class="rtl ? 'ml-1' : 'mr-1'" role="img" aria-hidden="true" />
+          <span class="shrink-0 select-none text-sm">{{ currentLocale?.name }}</span>
+          <i
+            class="icon-[hugeicons--arrow-down-01] transition-all shrink-0"
+            role="img"
+            :class="{ 'rotate-180': active }"
+            aria-hidden="true"
+          />
+        </button>
       </template>
       <template #content="{ close }">
-        <div class="card w-[264px] p-2 rounded-2xl flex flex-wrap">
+        <div class="card langs w-[264px] p-2 rounded-lg flex flex-wrap text-sm grid grid-cols-2">
           <NuxtLink
             v-for="l in locales"
             :key="l.code"
             :to="switchLocalePath(l.code)"
-            class="h-8 px-2 rounded-xl w-[122px] line-clamp-1 break-all leading-8"
-            :class="l.code === locale ? 'color-disable cursor-default' : 'hover:bg-gray-100 dark:hover:bg-gray-700 hover:color-action'"
+            replace
+            :class="l.code === locale ? 'dis' : ''"
             @click="close()"
           >
             {{ l.name }}
@@ -46,17 +46,76 @@ function openAuthWindow() {
         </div>
       </template>
     </DropDown>
-    <ThemeToggle />
-    <a href="https://github.com/rotick/nuxt-starter" target="_blank" aria-label="Folk on GitHub" class="text-2xl ml-4 flex items-center">
+    <ThemeToggle class="ml-2 hidden md:flex" />
+    <a href="https://github.com/semipx/nuxt-starter" target="_blank" aria-label="Folk on GitHub" class="hidden md:flex text-2xl w-9 h-9 rounded-lg center ml-2 md:hover:bg-gray-200 md:dark:hover:bg-gray-700">
       <i class="icon-[mdi--github]" role="img" aria-hidden="true" />
     </a>
-    <button v-if="runtimeConfig.public.googleAuth" class="h-8 rounded-lg bg-primary-500 text-white pr-2 flex items-center ml-4 overflow-hidden" @click="openAuthWindow">
-      <span class="center h-full w-8 bg-white dark:bg-gray-700 text-xl mr-1">
-        <i class="icon-[flat-color-icons--google]" role="img" aria-hidden="true" />
-      </span>
-      Sign in with Google
+    <button
+      class="h-9 center ml-2 w-9 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 text-sm border border-main color-action center flex md:hidden"
+      @click="showSider = true"
+    >
+      <i class="icon-[hugeicons--menu-01] text-lg" role="img" aria-hidden="true" />
     </button>
+    <ClientOnly>
+      <transition name="fade" :duration="150">
+        <div v-if="showSider" class="fixed top-0 left-0 w-full h-full bg-black/50 dark:bg-black/80 backdrop-blur-sm z-30" @click="closeSider" />
+      </transition>
+      <div class="fixed right-0 top-0 bg-body w-56 h-[100vh] z-50 p-2" :class="showSider ? 'block slide-right' : 'hidden'">
+        <DropDown
+          class="flex items-center relative cursor-default shrink-0 border-b border-main"
+          :top="38"
+          :left="0"
+        >
+          <template #default="{ active }">
+            <button class="h-11 w-full flex items-center justify-between px-4 rounded-lg color-action hover:bg-gray-200 dark:hover:bg-gray-700" :class="{ 'bg-gray-200 dark:bg-gray-700': active }">
+              <span class="center">
+                <i class="icon-[hugeicons--translation] text-xl shrink-0" :class="rtl ? 'ml-1' : 'mr-1'" role="img" aria-hidden="true" />
+                <span class="shrink-0 select-none text-sm">{{ currentLocale?.name }}</span>
+              </span>
+              <i
+                class="icon-[hugeicons--arrow-down-01] transition-all shrink-0"
+                role="img"
+                :class="{ 'rotate-180': active }"
+                aria-hidden="true"
+              />
+            </button>
+          </template>
+          <template #content="{ close }">
+            <div class="langs w-full text-base grid grid-cols-2">
+              <NuxtLink
+                v-for="l in locales"
+                :key="l.code"
+                :to="switchLocalePath(l.code)"
+                replace
+                :class="l.code === locale ? 'dis' : ''"
+                @click="close()"
+              >
+                {{ l.name }}
+              </NuxtLink>
+            </div>
+          </template>
+        </DropDown>
+        <ThemeToggle class="mt-2 ml-4 bg-gray-200 dark:bg-gray-700" />
+      </div>
+    </ClientOnly>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.langs a{
+  @apply h-10 sm:h-8 px-2 rounded-lg line-clamp-1 break-all leading-10 sm:leading-8 hover:bg-gray-200 dark:hover:bg-gray-700 hover:text-gray-700 dark:hover:text-gray-200;
+  &.dis{@apply text-gray-300 dark:text-gray-600 cursor-default hover:bg-transparent dark:hover:bg-transparent hover:text-gray-300 dark:hover:text-gray-600}
+}
+.slide-right {
+  animation: slideLeft 0.15s ease forwards;
+}
+
+@keyframes slideLeft {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+</style>

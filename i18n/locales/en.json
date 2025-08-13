@@ -1,0 +1,18 @@
+{
+  "siteName": "NuxtStarter",
+  "seoTitle": "NuxtStarter",
+  "seoDescription": "description",
+  "lightTip": "Light Mode",
+  "darkTip": "Dark Mode",
+  "login": "Log in",
+  "signup": "Sign up",
+  "setting": "Setting",
+  "feedback": "Feedback",
+  "modalOK": "OK",
+  "modalConfirm": "Confirm",
+  "modalCancel": "Cancel",
+  "timeout": "Request timed out. Please try again later.",
+  "networkErr": "Network connection failed. Please try again.",
+  "needLogin": "Please log in to continue.",
+  "retry": "Retry"
+}

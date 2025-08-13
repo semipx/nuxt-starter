@@ -1,0 +1,18 @@
+{
+  "siteName": "NuxtStarter",
+  "seoTitle": "NuxtStarter",
+  "seoDescription": "description",
+  "lightTip": "切换到日间模式",
+  "darkTip": "切换到暗黑模式",
+  "login": "登录",
+  "signup": "注册",
+  "setting": "设置",
+  "feedback": "反馈或建议",
+  "modalOK": "好的",
+  "modalConfirm": "确定",
+  "modalCancel": "取消",
+  "timeout": "请求超时，请稍后重试",
+  "networkErr": "网络连接失败，请稍后重试",
+  "needLogin": "请先登录",
+  "retry": "重试"
+}

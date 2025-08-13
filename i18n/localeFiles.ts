@@ -6,7 +6,7 @@ const locales = [
     file: 'en.json'
   },
   {
-    code: 'zh-hans',
+    code: 'zh-Hans',
     language: 'zh',
     name: '简体中文',
     file: 'zh-hans.json'
@@ -18,7 +18,7 @@ const locales = [
     file: 'es.json'
   },
   {
-    code: 'zh-hant',
+    code: 'zh-Hant',
     language: 'zh-TW',
     name: '正體中文',
     file: 'zh-hant.json'

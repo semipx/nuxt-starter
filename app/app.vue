@@ -1,27 +1,20 @@
 <template>
   <NuxtPage />
+  <Modal ref="modalRef" />
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n()
+import type { ModalOpen } from '~/composables/useModal'
+
+const modalRef = useTemplateRef('modalRef') as Ref<ModalOpen>
+useModal(modalRef)
+const { t, locale } = useI18n()
 const route = useRoute()
-const i18nHead = useLocaleHead({
-  addSeoAttributes: true
-})
+const i18nHead = useLocaleHead()
 const url = useRequestURL()
 // const origin = 'https://' + url.host
 const origin = url.origin
-const { fetch: refreshSession } = useUserSession()
-onMounted(() => {
-  const channel = new BroadcastChannel('authChannel')
-  channel.addEventListener('message', function (event) {
-    if (event.data === 'auth-ready') {
-      refreshSession().then(() => {
-        channel.postMessage('session-refreshed')
-      })
-    }
-  })
-})
+const coverImg = locale.value === 'zh-Hans' ? `${origin}/cover.jpg` : `${origin}/cover.jpg`
 useHead({
   htmlAttrs: {
     lang: i18nHead.value.htmlAttrs?.lang
@@ -34,18 +27,20 @@ useHead({
     {
       rel: 'icon',
       type: 'image/png',
-      sizes: '16x16',
-      href: '/favicon-16x16.png'
+      href: '/favicon-96x96.png'
     },
     {
       rel: 'icon',
       type: 'image/png',
-      sizes: '32x32',
       href: '/favicon-32x32.png'
     },
     {
+      rel: 'shortcut icon',
+      href: '/favicon.ico'
+    },
+    {
       rel: 'apple-touch-icon',
-      sizes: '152x152',
+      sizes: '180x180',
       href: '/apple-touch-icon.png'
     },
     {
@@ -54,6 +49,7 @@ useHead({
     }
   ],
   meta: [
+    { name: 'viewport', content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0' },
     ...(i18nHead.value?.meta || []),
     { name: 'description', content: t('seoDescription') },
     { property: 'og:site_name', content: t('siteName') },
@@ -61,13 +57,13 @@ useHead({
     { property: 'og:type', content: 'website' },
     { property: 'og:title', content: t('seoTitle') },
     { property: 'og:description', content: t('seoDescription') },
-    { property: 'og:image', content: `${origin}/cover.jpg` },
+    { property: 'og:image', content: coverImg },
     { name: 'twitter:card', content: 'summary_large_image' },
     { name: 'twitter:domain', content: url.host },
     { name: 'twitter:url', content: `${origin}/` },
     { name: 'twitter:title', content: t('seoTitle') },
     { name: 'twitter:description', content: t('seoDescription') },
-    { name: 'twitter:image', content: `${origin}/cover.jpg` }
+    { name: 'twitter:image', content: coverImg }
   ]
 })
 </script>

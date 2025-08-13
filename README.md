@@ -1,6 +1,6 @@
 # Nuxt starter
 ```bash
-git clone --depth=1 https://github.com/rotick/nuxt-starter.git new-project
+git clone --depth=1 https://github.com/semipx/nuxt-starter.git new-project
 
 cd new-project
 

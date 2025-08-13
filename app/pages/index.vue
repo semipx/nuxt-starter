@@ -6,10 +6,7 @@ useHead({
 </script>
 
 <template>
-  <header class="flex items-center justify-between px-6 h-12">
-    <Logo />
-    <ToolBar />
-  </header>
+  <Header />
 </template>
 
 <style>

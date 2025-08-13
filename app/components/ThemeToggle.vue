@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { useColorMode } from '#imports'
-
+const { t } = useI18n()
 const colorMode = useColorMode()
 function toggleTheme() {
   colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
@@ -8,13 +7,14 @@ function toggleTheme() {
 </script>
 
 <template>
-  <div class="ml-4 text-2xl cursor-pointer items-center relative group flex items-center" @click="toggleTheme">
-    <i v-show="colorMode.value === 'system'" class="icon-[solar--display-bold]" role="img" aria-hidden="true" />
-    <i v-show="colorMode.value === 'light'" class="icon-[solar--sun-bold]" role="img" aria-hidden="true" />
-    <i v-show="colorMode.value === 'dark'" class="icon-[solar--moon-stars-bold]" role="img" aria-hidden="true" />
-    <div role="tooltip" class="absolute top-7 right-0 whitespace-nowrap card rounded-lg p-2 text-sm color-action hidden md:group-hover:block">
-      {{ colorMode.value === 'light' ? $t('darkTip') : $t('lightTip') }}
-    </div>
+  <div
+    class="sm:tooltip tooltip-down text-xl cursor-pointer items-center relative w-9 h-9 rounded-lg center md:hover:bg-gray-200 md:dark:hover:bg-gray-700 color-action"
+    :data-tip="colorMode.value === 'light' ? t('darkTip') : t('lightTip')"
+    @click="toggleTheme"
+  >
+    <i v-show="colorMode.value === 'system'" class="icon-[hugeicons--modern-tv]" role="img" aria-hidden="true" />
+    <i v-show="colorMode.value === 'light'" class="icon-[hugeicons--sun-02]" role="img" aria-hidden="true" />
+    <i v-show="colorMode.value === 'dark'" class="icon-[hugeicons--moon-02]" role="img" aria-hidden="true" />
   </div>
 </template>
 
