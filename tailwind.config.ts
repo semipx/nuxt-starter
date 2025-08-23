@@ -6,7 +6,7 @@ export default {
   darkMode: 'class',
   theme: {
     fontFamily: {
-      sans: ['Inter var', 'Inter', ...defaultTheme.fontFamily.sans]
+      sans: ['Inter var', 'Inter', 'ui-sans-serif', 'sans-serif', 'system-ui', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji']
     },
     extend: {
       colors: {

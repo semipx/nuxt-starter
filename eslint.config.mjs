@@ -29,7 +29,8 @@ export default withNuxt(
       '@typescript-eslint/triple-slash-reference': 'off',
       '@typescript-eslint/restrict-template-expressions': 'off',
       '@typescript-eslint/no-misused-promises': 'off',
-      '@typescript-eslint/ban-ts-comment': 'off'
+      '@typescript-eslint/ban-ts-comment': 'off',
+      'nuxt/nuxt-config-keys-order': 'off'
     }
   }
 )

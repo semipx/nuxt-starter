@@ -92,9 +92,17 @@ defineExpose({ open, close })
           <i class="icon-[material-symbols--close]" role="img" aria-hidden="true" />
         </button>
         <template v-if="$slots.default">
-          <slot name="header" />
-          <slot />
-          <slot name="footer" />
+          <div class="flex flex-col h-full">
+            <div class="shrink-0">
+              <slot name="header" />
+            </div>
+            <div class="flex-grow overflow-auto">
+              <slot />
+            </div>
+            <div class="shrink-0">
+              <slot name="footer" />
+            </div>
+          </div>
         </template>
         <template v-else>
           <div class="flex shrink-0">
