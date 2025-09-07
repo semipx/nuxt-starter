@@ -34,10 +34,8 @@ const emit = defineEmits<{
 
 const isVisible = ref(false)
 watch(model, () => {
-  if (model.value) {
-    isVisible.value = true
-  }
-})
+  isVisible.value = !!model.value
+}, { immediate: true })
 const options = ref(Object.assign({}, defaultOptions))
 watch(() => props, () => {
   options.value = Object.assign({}, defaultOptions, props)
@@ -96,7 +94,7 @@ defineExpose({ open, close })
             <div class="shrink-0">
               <slot name="header" />
             </div>
-            <div class="flex-grow overflow-auto">
+            <div class="flex-grow overflow-auto overscroll-contain">
               <slot />
             </div>
             <div class="shrink-0">

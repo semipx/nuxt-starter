@@ -7,12 +7,12 @@ export function useOFetch() {
   const localePath = useLocalePath()
   const { t } = useI18n()
   // const { csrf } = useCsrf()
-  async function $ofetch(input: FetchRequest, options?: FetchOptions) {
+  async function $ofetch<T = unknown>(input: FetchRequest, options?: FetchOptions) {
     const headers = {
       // 'csrf-token': csrf,
       ...(options?.headers || {})
     } as any
-    return await ofetch(input, {
+    return await ofetch<T>(input, {
       timeout: 15000,
       ...options,
       headers
@@ -44,8 +44,8 @@ export function useOFetch() {
       throw new Error(handleI18nError(error.data.message || error.data.statusMessage))
     })
   }
-  async function oFetch(input: FetchRequest, options?: FetchOptions) {
-    return await $ofetch(input, options).catch((error) => {
+  async function oFetch<T = unknown>(input: FetchRequest, options?: FetchOptions) {
+    return await $ofetch<T>(input, options).catch((error) => {
       errorHandle(error)
       return null
     })
