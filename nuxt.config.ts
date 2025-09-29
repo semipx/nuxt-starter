@@ -3,7 +3,7 @@ import localeFiles from './i18n/localeFiles'
 export default defineNuxtConfig({
 
   modules: [
-    '@nuxtjs/tailwindcss',
+    // '@nuxtjs/tailwindcss',
     '@nuxtjs/color-mode',
     '@nuxtjs/device',
     '@nuxt/eslint',
@@ -13,7 +13,13 @@ export default defineNuxtConfig({
     '@nuxtjs/seo'
   ],
   devtools: { enabled: true },
-
+  css: ['~/assets/css/tailwind.css'],
+  postcss: {
+    plugins: {
+      tailwindcss: {},
+      autoprefixer: {}
+    }
+  },
   site: {
     url: '',
     name: 'NuxtStarter',
@@ -95,9 +101,5 @@ export default defineNuxtConfig({
 
   sitemap: {
     exclude: ['/test/**']
-  },
-
-  tailwindcss: {
-    cssPath: '~/assets/css/tailwind.css'
   }
 })

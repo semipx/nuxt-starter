@@ -7,6 +7,7 @@ export interface ModalOptions {
   confirmButtonText?: string
   maskClosable?: boolean
   modalClass?: string
+  mobileWidth?: number
 }
 interface ModalProvider {
   confirm: (options: ModalOptions) => Promise<void>

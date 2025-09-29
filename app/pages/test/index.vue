@@ -20,7 +20,7 @@ function zodShow() {
 <template>
   <Header size="small" />
   <button @click="showModal = true">打开</button>
-  <Modal v-model="showModal" modal-class="w-72 p-6 rounded-2xl">
+  <Modal v-model="showModal" modal-class="w-72 p-6 rounded-2xl bg-front shadow-xl">
     <template #header>Header</template>
     <div>test</div>
     <template #footer>footer</template>
@@ -28,8 +28,11 @@ function zodShow() {
   <button @click="showConfirm">confirm</button>
   <button @click="show">show</button>
   <button @click="zodShow">zodShow</button>
+  <div class="test">text</div>
 </template>
 
 <style scoped>
-
+.test{
+  @apply color-action;
+}
 </style>

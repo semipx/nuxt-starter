@@ -46,7 +46,7 @@ async function main(lang: string, reTranslateKey?: string[]) {
   console.log(lang)
   // console.log(prompt)
   const res: any = await openai.chat.completions.create({
-    model: 'openai/gpt-4.1',
+    model: 'openai/gpt-5',
     messages: [
       { role: 'system', content: 'You are a helpful assistant who is proficient in various languages and designed to output JSON.' },
       { role: 'user', content: prompt }

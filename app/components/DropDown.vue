@@ -25,20 +25,8 @@ defineProps({
     default: undefined
   }
 })
-const show = ref(false)
-const wrap = ref()
-onClickOutside(wrap, () => {
-  show.value = false
-})
-function toggleShow() {
-  show.value = !show.value
-}
-function closeDropDown() {
-  show.value = false
-}
-const { width: windowWidth } = useWindowSize()
 
-// const isMobile = computed(() => windowWidth.value < 640)
+const { width: windowWidth } = useWindowSize()
 const isMobile = ref(false)
 onMounted(() => {
   isMobile.value = windowWidth.value < 640
@@ -46,6 +34,29 @@ onMounted(() => {
 watch(windowWidth, () => {
   isMobile.value = windowWidth.value < 640
 })
+const bottomSheet = ref<InstanceType<typeof BottomSheet>>()
+const show = ref(false)
+const wrap = ref()
+onClickOutside(wrap, () => {
+  closeDropDown()
+})
+function toggleShow() {
+  show.value = !show.value
+  if (isMobile.value) {
+    if (show.value) {
+      bottomSheet.value?.open()
+    }
+    else {
+      bottomSheet.value?.close()
+    }
+  }
+}
+function closeDropDown() {
+  show.value = false
+  if (isMobile.value) {
+    bottomSheet.value?.close()
+  }
+}
 </script>
 
 <template>
@@ -55,10 +66,10 @@ watch(windowWidth, () => {
       v-show="show && !isMobile"
       class="absolute z-50"
       :style="{
-        top: !isMobile && bottom === undefined ? `${top}px` : undefined,
-        bottom: !isMobile && bottom !== undefined ? `${bottom}px` : undefined,
-        left: !isMobile && left !== undefined ? `${left}px` : undefined,
-        right: !isMobile && right !== undefined ? `${right}px` : undefined,
+        top: bottom === undefined ? `${top}px` : undefined,
+        bottom: bottom !== undefined ? `${bottom}px` : undefined,
+        left: left !== undefined ? `${left}px` : undefined,
+        right: right !== undefined ? `${right}px` : undefined,
         zIndex: zIndex
       }"
       @click.stop
@@ -66,7 +77,7 @@ watch(windowWidth, () => {
       <slot :close="closeDropDown" name="content" />
     </div>
     <ClientOnly>
-      <BottomSheet v-if="isMobile" v-model="show">
+      <BottomSheet v-if="isMobile" ref="bottomSheet">
         <slot :close="closeDropDown" name="content" />
       </BottomSheet>
     </ClientOnly>

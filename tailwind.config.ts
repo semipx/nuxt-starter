@@ -1,9 +1,10 @@
-import defaultTheme from 'tailwindcss/defaultTheme'
+// import defaultTheme from 'tailwindcss/defaultTheme'
 import colors from 'tailwindcss/colors'
 import { addDynamicIconSelectors } from '@iconify/tailwind'
 
 export default {
   darkMode: 'class',
+  content: ['app/**/*.{vue,js,ts,jsx,tsx}'],
   theme: {
     fontFamily: {
       sans: ['Inter var', 'Inter', 'ui-sans-serif', 'sans-serif', 'system-ui', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji']

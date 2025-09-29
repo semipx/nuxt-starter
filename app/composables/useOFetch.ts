@@ -5,10 +5,10 @@ export function useOFetch() {
   const router = useRouter()
   const localePath = useLocalePath()
   const { t } = useI18n()
-  const { csrf } = useCsrf()
+  // const { csrf } = useCsrf()
   async function $ofetch<T = unknown>(input: FetchRequest, options?: FetchOptions) {
     const headers = {
-      'csrf-token': csrf,
+      // 'csrf-token': csrf,
       ...(options?.headers || {})
     }
     return await $fetch<T>(input, {
