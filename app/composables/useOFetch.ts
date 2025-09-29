@@ -1,22 +1,21 @@
 import type { FetchOptions, FetchRequest } from 'ofetch'
-import { ofetch } from 'ofetch'
 
 export function useOFetch() {
   const { errorHandle } = useModal()
   const router = useRouter()
   const localePath = useLocalePath()
   const { t } = useI18n()
-  // const { csrf } = useCsrf()
+  const { csrf } = useCsrf()
   async function $ofetch<T = unknown>(input: FetchRequest, options?: FetchOptions) {
     const headers = {
-      // 'csrf-token': csrf,
+      'csrf-token': csrf,
       ...(options?.headers || {})
-    } as any
-    return await ofetch<T>(input, {
+    }
+    return await $fetch<T>(input, {
       timeout: 15000,
       ...options,
       headers
-    }).catch((error) => {
+    } as any).catch((error) => {
       if (error.message.includes('TimeoutError')) {
         throw new Error(t('timeout'))
       }
@@ -25,7 +24,7 @@ export function useOFetch() {
       }
       if (error.statusCode === 401 && router.currentRoute.value.path !== '/login') {
         router.push(localePath({
-          path: '/login',
+          path: '/signin',
           query: { redirect: router.currentRoute.value.fullPath }
         }))
         throw new Error(t('needLogin'))
@@ -37,11 +36,14 @@ export function useOFetch() {
         }
         return message
       }
-      if (error.data.data?.name === 'ZodError') {
-        const messages = JSON.parse(error.data.message)
-        throw new Error(handleI18nError(messages[0].message))
+      if (error.data) {
+        if (error.data.data?.name === 'ZodError') {
+          const messages = JSON.parse(error.data.message)
+          throw new Error(handleI18nError(messages[0].message))
+        }
+        throw new Error(handleI18nError(error.data.message || error.data.statusMessage))
       }
-      throw new Error(handleI18nError(error.data.message || error.data.statusMessage))
+      throw error
     })
   }
   async function oFetch<T = unknown>(input: FetchRequest, options?: FetchOptions) {

@@ -1,8 +1,12 @@
 <script setup lang="ts">
 import type { ModalOptions } from '~/composables/useModal'
+import { useWindowSize } from '@vueuse/core'
 import BottomSheet from '@douxcode/vue-spring-bottom-sheet'
 import '@douxcode/vue-spring-bottom-sheet/dist/style.css'
 
+defineOptions({
+  inheritAttrs: false
+})
 const defaultOptions = {
   title: '',
   content: '',
@@ -12,7 +16,8 @@ const defaultOptions = {
   confirmButtonText: 'OK',
   maskClosable: true,
   toast: false,
-  modalClass: 'w-80 md:w-96 p-6 rounded-3xl'
+  modalClass: 'bg-front w-80 md:w-96 p-6 rounded-3xl shadow-xl',
+  mobileWidth: 640
 }
 const props = withDefaults(defineProps<ModalOptions>(), {
   title: '',
@@ -23,18 +28,27 @@ const props = withDefaults(defineProps<ModalOptions>(), {
   confirmButtonText: 'OK',
   maskClosable: true,
   toast: false,
-  modalClass: 'w-80 md:w-96 p-6 rounded-3xl'
+  modalClass: 'bg-front w-80 md:w-96 p-6 rounded-3xl shadow-xl',
+  mobileWidth: 640
 })
 
-const { isMobile } = useUserEnv()
 const model = defineModel<boolean>()
 const emit = defineEmits<{
   (e: 'confirm' | 'cancel'): void
 }>()
 
+const { width } = useWindowSize()
+const isMobile = computed(() => width.value <= props.mobileWidth)
 const isVisible = ref(false)
+const bottomSheet = ref<InstanceType<typeof BottomSheet>>()
 watch(model, () => {
   isVisible.value = !!model.value
+  if (isVisible.value) {
+    bottomSheet.value?.open()
+  }
+  else {
+    bottomSheet.value?.close()
+  }
 }, { immediate: true })
 const options = ref(Object.assign({}, defaultOptions))
 watch(() => props, () => {
@@ -82,8 +96,8 @@ defineExpose({ open, close })
     </transition>
     <transition name="fade-down" :duration="150">
       <div
-        v-if="isVisible"
-        class="bg-front fixed z-50 left-[50%] -translate-x-[50%] shadow-xl"
+        v-show="isVisible"
+        class="fixed z-50 left-[50%] -translate-x-[50%]"
         :class="[options.modalClass, options.toast ? 'border border-main top-6' : 'top-[50%] -translate-y-[50%]']"
       >
         <button v-if="options.maskClosable && !options.toast" class="text-xl w-8 h-8 rounded-lg flex justify-center items-center md:hover:bg-rose-500 md:hover:border-rose-500 md:hover:text-white absolute top-3 right-3" @click="close">
@@ -92,13 +106,13 @@ defineExpose({ open, close })
         <template v-if="$slots.default">
           <div class="flex flex-col h-full">
             <div class="shrink-0">
-              <slot name="header" />
+              <slot name="header" :is-mobile="isMobile" />
             </div>
             <div class="flex-grow overflow-auto overscroll-contain">
-              <slot />
+              <slot :is-mobile="isMobile" />
             </div>
             <div class="shrink-0">
-              <slot name="footer" />
+              <slot name="footer" :is-mobile="isMobile" />
             </div>
           </div>
         </template>
@@ -128,10 +142,10 @@ defineExpose({ open, close })
     </transition>
   </div>
   <ClientOnly v-if="isMobile && $slots.default">
-    <BottomSheet v-model="isVisible" @closed="close">
-      <template #header><slot name="header" /></template>
-      <slot />
-      <template #footer><slot name="footer" /></template>
+    <BottomSheet ref="bottomSheet" :teleport-defer="true" v-bind="$attrs" @closed="close">
+      <template #header><slot name="header" :is-mobile="isMobile" /></template>
+      <slot :is-mobile="isMobile" />
+      <template #footer><slot name="footer" :is-mobile="isMobile" /></template>
     </BottomSheet>
   </ClientOnly>
 </template>
