@@ -6,6 +6,7 @@ export interface ModalOptions {
   cancelButtonText?: string
   confirmButtonText?: string
   maskClosable?: boolean
+  zIndex?: number
   modalClass?: string
   mobileWidth?: number
 }

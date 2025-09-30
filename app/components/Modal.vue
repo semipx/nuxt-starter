@@ -16,6 +16,7 @@ const defaultOptions = {
   confirmButtonText: 'OK',
   maskClosable: true,
   toast: false,
+  zIndex: 10000,
   modalClass: 'bg-front w-80 md:w-96 p-6 rounded-3xl shadow-xl',
   mobileWidth: 640
 }
@@ -28,6 +29,7 @@ const props = withDefaults(defineProps<ModalOptions>(), {
   confirmButtonText: 'OK',
   maskClosable: true,
   toast: false,
+  zIndex: 10000,
   modalClass: 'bg-front w-80 md:w-96 p-6 rounded-3xl shadow-xl',
   mobileWidth: 640
 })
@@ -92,13 +94,14 @@ defineExpose({ open, close })
 <template>
   <div v-if="!isMobile || (isMobile && !$slots.default)">
     <transition name="fade" :duration="150">
-      <div v-if="isVisible && !options.toast" class="fixed z-50 top-0 left-0 w-full h-full bg-black/50 dark:bg-black/80 backdrop-blur-sm" @click="maskClose" />
+      <div v-if="isVisible && !options.toast" class="fixed z-50 top-0 left-0 w-full h-full bg-black/50 dark:bg-black/80 backdrop-blur-sm" :style="{ zIndex: options.zIndex }" @click="maskClose" />
     </transition>
     <transition name="fade-down" :duration="150">
       <div
         v-show="isVisible"
         class="fixed z-50 left-[50%] -translate-x-[50%]"
         :class="[options.modalClass, options.toast ? 'border border-main top-6' : 'top-[50%] -translate-y-[50%]']"
+        :style="{ zIndex: options.zIndex }"
       >
         <button v-if="options.maskClosable && !options.toast" class="text-xl w-8 h-8 rounded-lg flex justify-center items-center md:hover:bg-rose-500 md:hover:border-rose-500 md:hover:text-white absolute top-3 right-3" @click="close">
           <i class="icon-[material-symbols--close]" role="img" aria-hidden="true" />
