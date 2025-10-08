@@ -14,5 +14,7 @@
   "timeout": "Request timed out. Please try again later.",
   "networkErr": "Network connection failed. Please try again.",
   "needLogin": "Please log in to continue.",
-  "retry": "Retry"
+  "retry": "Retry",
+  "refresh": "Refresh",
+  "csrfErr": "An update is available. Please refresh and try again."
 }

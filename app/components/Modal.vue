@@ -66,7 +66,7 @@ const open = (opts: ModalOptions) => {
     p.resolve = resolve
     p.reject = reject
     isVisible.value = true
-    options.value = Object.assign({}, defaultOptions, opts)
+    options.value = Object.assign({}, defaultOptions, props, opts)
   })
 }
 
@@ -92,14 +92,14 @@ defineExpose({ open, close })
 </script>
 
 <template>
-  <div v-if="!isMobile || (isMobile && !$slots.default)">
+  <Teleport v-if="!isMobile || (isMobile && !$slots.default)" to="body">
     <transition name="fade" :duration="150">
-      <div v-if="isVisible && !options.toast" class="fixed z-50 top-0 left-0 w-full h-full bg-black/50 dark:bg-black/80 backdrop-blur-sm" :style="{ zIndex: options.zIndex }" @click="maskClose" />
+      <div v-if="isVisible && !options.toast" class="fixed top-0 left-0 w-full h-full bg-black/50 dark:bg-black/80 backdrop-blur-sm" :style="{ zIndex: options.zIndex }" @click="maskClose" />
     </transition>
     <transition name="fade-down" :duration="150">
       <div
         v-show="isVisible"
-        class="fixed z-50 left-[50%] -translate-x-[50%]"
+        class="fixed left-[50%] -translate-x-[50%]"
         :class="[options.modalClass, options.toast ? 'border border-main top-6' : 'top-[50%] -translate-y-[50%]']"
         :style="{ zIndex: options.zIndex }"
       >
@@ -143,8 +143,16 @@ defineExpose({ open, close })
         </template>
       </div>
     </transition>
-  </div>
+  </Teleport>
   <ClientOnly v-if="isMobile && $slots.default">
+    <Teleport to="body">
+      <div
+        v-if="isVisible && $attrs.blocking === false"
+        class="fixed top-0 left-0 w-full h-full bg-black/50 dark:bg-black/80 backdrop-blur-sm"
+        style="z-index:9998"
+        @click="maskClose"
+      />
+    </Teleport>
     <BottomSheet ref="bottomSheet" :teleport-defer="true" v-bind="$attrs" @closed="close">
       <template #header><slot name="header" :is-mobile="isMobile" /></template>
       <slot :is-mobile="isMobile" />

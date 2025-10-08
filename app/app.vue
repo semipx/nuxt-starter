@@ -1,6 +1,6 @@
 <template>
   <NuxtPage />
-  <Modal ref="modalRef" />
+  <Modal ref="modalRef" :z-index="10001" />
 </template>
 
 <script setup lang="ts">

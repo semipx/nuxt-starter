@@ -52,16 +52,21 @@ export default function useModal(modalRef?: Ref<ModalOpen>): ModalProvider {
         })
       },
       errorHandle(error) {
+        const isCsrfErr = error.message === 'CSRF Token invalid'
         const options = {
           type: 'error',
           title: '',
-          content: error.message,
+          content: isCsrfErr ? t('csrfErr') : error.message,
           showCancelButton: false,
           cancelButtonText: '',
-          confirmButtonText: t('modalOK'),
+          confirmButtonText: isCsrfErr ? t('refresh') : t('modalOK'),
           maskClosable: true
         }
-        modalRef.value.open(options as ModalOptions)
+        modalRef.value.open(options as ModalOptions).then(() => {
+          if (isCsrfErr) {
+            window.location.reload()
+          }
+        })
       }
     }
     provide('modalProvider', provider)

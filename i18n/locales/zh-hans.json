@@ -14,5 +14,7 @@
   "timeout": "请求超时，请稍后重试",
   "networkErr": "网络连接失败，请稍后重试",
   "needLogin": "请先登录",
-  "retry": "重试"
+  "retry": "重试",
+  "refresh": "刷新",
+  "csrfErr": "应用有更新，请刷新后重试"
 }
