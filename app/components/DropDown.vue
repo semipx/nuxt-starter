@@ -77,7 +77,7 @@ function closeDropDown() {
       <slot :close="closeDropDown" name="content" />
     </div>
     <ClientOnly>
-      <BottomSheet v-if="isMobile" ref="bottomSheet">
+      <BottomSheet v-if="isMobile" ref="bottomSheet" :snap-points="['95%']">
         <slot :close="closeDropDown" name="content" />
       </BottomSheet>
     </ClientOnly>
