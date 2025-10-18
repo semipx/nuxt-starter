@@ -36,7 +36,6 @@
     "@nuxtjs/google-fonts": "^3.2.0",
     "@nuxtjs/i18n": "^10.1.1",
     "@nuxtjs/seo": "^3.2.2",
-    "@nuxtjs/tailwindcss": "^6.14.0",
     "dotenv": "^17.2.3",
     "eslint": "^9.38.0",
     "eventsource-parser": "^3.0.6",
